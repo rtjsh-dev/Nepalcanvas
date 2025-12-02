@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Destination {
+  id               String             @id @default(cuid())
+  name             String
+  slug             String             @unique
+  category         String
+  region           String
+  difficultyLevel  String?
+  altitude         Int?
+  bestSeason       String?
+  entryFee         String?
+  overview         String
+  howToGetThere    String?
+  whatToSee        String?
+  tips             String?
+  latitude         Float?
+  longitude        Float?
+  isFeatured       Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  images           DestinationImage[]
+}
+
+model DestinationImage {
+  id            String      @id @default(cuid())
+  destinationId String
+  imageUrl      String
+  isPrimary     Boolean     @default(false)
+  order         Int         @default(0)
+  destination   Destination @relation(fields: [destinationId], references: [id])
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
